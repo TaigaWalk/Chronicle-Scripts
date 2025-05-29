@@ -1,9 +1,7 @@
 name: Ingest Microsoft Entra Non-Interactive Sign-ins into Chronicle
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '*/15 * * * *'
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   ingest:
