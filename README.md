@@ -21,15 +21,17 @@ While Chronicle provides powerful detection capabilities, it does **not offer na
 - Python-based, modular connectors
 - GitHub Actions support for **manual** and **scheduled (cron)** runs
 - Secure credential injection via GitHub Secrets
-- Shared utilities for common ingestion and transformation logic (`common/` directory)
 
 ---
 
 ## 🔗 Supported Integrations
 
-| Integration        | Log Type   | Description                                                             |
-|--------------------|------------|-------------------------------------------------------------------------|
-| Microsoft Entra ID | `AZURE_AD` | Captures non-interactive sign-in events via Microsoft Graph API (Beta)  |
+| Integration        | Log Type     | Description                                                             |
+|--------------------|--------------|-------------------------------------------------------------------------|
+| Microsoft Entra ID | `AZURE_AD`   | Captures non-interactive sign-in events via Microsoft Graph API (Beta)  |
+| 1Password          | `ONEPASSWORD`| Pulls audit events using 1Password Events API                           |
+| GitHub             | `GITHUB`     | Collects GitHub org audit logs using the REST API                       |
+| Snowflake          | `SNOWFLAKE`  | Gathers usage logs from ACCOUNT_USAGE views in Snowflake                |
 
 ---
 
@@ -37,40 +39,36 @@ While Chronicle provides powerful detection capabilities, it does **not offer na
 
 ```
 chronicle-scripts/
-├── common/                              # Shared helpers (ingest, utils, env_constants)
-│   ├── ingest.py
-│   ├── utils.py
-│   └── env_constants.py
-│
-├── entra-noninteractive-chronicle-ingestor/  # Microsoft Entra sign-ins
-│   ├── main.py
-│   └── requirements.txt
+├── 1password-chronicle-ingestor/            # 1Password Events API ingestion
+├── entra-noninteractive-chronicle-ingestor/ # Microsoft Entra non-interactive sign-ins
+├── github-chronicle-ingestor/               # GitHub audit log ingestion
+├── snowflake-chronicle-ingestor/            # Snowflake ACCOUNT_USAGE logs
 ```
 
 ---
 
 ## 🧠 Configuration Notes
 
-- All secrets (API tokens, org IDs, credentials) are stored securely via **GitHub Actions Secrets**
-- Each integration leverages shared logic in the `common/` module
-- Each `main.py` handles:
-  - Authentication
-  - API communication and log parsing
-  - Ingestion into Chronicle
+- All secrets (API tokens, credentials, org URLs) are securely managed via **GitHub Actions Secrets**
+- Each `main.py` script handles:
+  - Authentication to source platform
+  - API communication and log retrieval
+  - Pushing logs to Chronicle via the Unstructured Ingestion API
 
 ---
 
 ## 🕒 Scheduling & Execution
 
-Each integration includes a GitHub Actions workflow that can:
+Each connector includes a GitHub Actions workflow that can:
 
 - Be triggered **manually**
-- Run on a **scheduled cron** interval (e.g., every 15 or 30 minutes)
+- Run on a **cron schedule** (e.g., every 15 or 30 minutes)
 
-This approach allows users to maintain full control over ingestion timing and avoid always-on cloud billing from serverless runners.
+This model gives users flexibility while avoiding the costs associated with always-on cloud infrastructure.
 
 ---
 
 ## 👥 Contributions
 
-If you’d like to contribute a new connector or improve an existing one, feel free to open a pull request or submit an issue.
+We welcome community contributions! To propose an enhancement or new connector, please open an issue or submit a pull request.
+
