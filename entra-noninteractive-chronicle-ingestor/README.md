@@ -11,7 +11,7 @@ This module is a custom Python-based ingestion script designed to forward non-in
 - Parses, normalizes, and forwards logs to Chronicle
 - Executes via GitHub Actions on a scheduled or manual basis
 
-> 🔎 **Note:** Chronicle currently provides native ingestion only for **interactive** Entra sign-ins. This script fills a critical visibility gap for service-based or daemon-based sign-ins, improving coverage and auditability.
+> 🔎 **Note:** Chronicle currently provides native ingestion only for **interactive** Entra sign-ins. This script fills a critical visibility gap for service-based or daemon-based sign-ins, improving auditability and detection coverage.
 
 ---
 
@@ -31,18 +31,18 @@ This script:
 - Python 3.7+
 - GitHub repository with GitHub Actions enabled
 - Microsoft Graph API access via:
-  - Tenant ID
-  - Client ID
-  - Client Secret
+  - `GRAPH_TENANT_ID`
+  - `GRAPH_CLIENT_ID`
+  - `GRAPH_CLIENT_SECRET`
 - Chronicle access:
-  - Customer ID
-  - Region
-  - Namespace (optional)
-  - Base64-encoded service account JSON key
+  - `CHRONICLE_CUSTOMER_ID`
+  - `CHRONICLE_REGION`
+  - `CHRONICLE_NAMESPACE` (optional)
+  - `CHRONICLE_CREDENTIALS_JSON` (Base64-encoded service account JSON)
 
 ---
 
-## 🔐 GitHub Secrets (Required)
+## 🔐 GitHub Secrets
 
 Store these values in your GitHub repository’s **Secrets**:
 
@@ -52,35 +52,34 @@ Store these values in your GitHub repository’s **Secrets**:
 - `CHRONICLE_CUSTOMER_ID`
 - `CHRONICLE_REGION`
 - `CHRONICLE_NAMESPACE`
-- `CHRONICLE_CREDENTIALS_JSON` (Base64-encoded Chronicle service account JSON)
+- `CHRONICLE_CREDENTIALS_JSON`
 
-> You can rename the secrets to your preference but must update both the workflow and script accordingly.
+These variables are referenced in both the ingestion script and GitHub Actions workflow.
 
 ---
 
 ## ⚙ GitHub Actions Workflow
 
-This repo includes a prebuilt GitHub Actions workflow at:
+The repo includes a GitHub Actions workflow at:
 
 ```
 .github/workflows/entra.yml
 ```
 
-It runs:
-- **Every 15 minutes** (`cron`)
-- **Manually** via the GitHub UI (`workflow_dispatch`)
+This workflow:
+- Installs dependencies
+- Decodes the Chronicle credentials
+- Runs the Entra ingestion script
 
-### Key steps:
-- Sets up Python environment
-- Installs script dependencies
-- Writes Chronicle service account JSON to disk
-- Runs the Entra ingestion script with all required secrets
+It runs:
+- **Every 15 minutes** via `cron`
+- **Manually** via `workflow_dispatch`
 
 ---
 
 ## 🧪 Running Locally
 
-You can run the script manually for testing:
+To test locally, export your environment variables and run:
 
 ```bash
 export GRAPH_CLIENT_ID=...
@@ -99,7 +98,7 @@ python main.py --creds-file /path/to/chronicle_sa.json
 
 - Uses the **Microsoft Graph Beta API** — subject to schema changes
 - The default filter fetches only **non-interactive** sign-in events
-- Useful for organizations that require **fine-grained service principal monitoring**
+- Intended for users who need deeper visibility into Entra usage beyond native Chronicle coverage
 
 ---
 
