@@ -26,12 +26,13 @@ While Chronicle provides powerful detection capabilities, it does **not offer na
 
 ## 🔗 Supported Integrations
 
-| Integration        | Log Type     | Description                                                             |
-|--------------------|--------------|-------------------------------------------------------------------------|
-| Microsoft Entra ID | `AZURE_AD`   | Captures non-interactive sign-in events via Microsoft Graph API (Beta)  |
-| 1Password          | `ONEPASSWORD`| Pulls audit events using 1Password Events API                           |
-| GitHub             | `GITHUB`     | Collects GitHub org audit logs using the REST API                       |
-| Snowflake          | `SNOWFLAKE`  | Gathers usage logs from ACCOUNT_USAGE views in Snowflake                |
+| Integration        | Log Type         | Description                                                             |
+|--------------------|------------------|-------------------------------------------------------------------------|
+| Microsoft Entra ID | `AZURE_AD`       | Captures non-interactive sign-in events via Microsoft Graph API (Beta)  |
+| 1Password          | `ONEPASSWORD`    | Pulls audit events using 1Password Events API                           |
+| GitHub             | `GITHUB`         | Collects GitHub org audit logs using the REST API                       |
+| Snowflake          | `SNOWFLAKE`      | Gathers usage logs from ACCOUNT_USAGE views in Snowflake                |
+| Thinkst Canary     | `THINKST_CANARY` | Ingests audit trail logs from the Canary console                        |
 
 ---
 
@@ -43,6 +44,7 @@ chronicle-scripts/
 ├── entra-noninteractive-chronicle-ingestor/ # Microsoft Entra non-interactive sign-ins
 ├── github-chronicle-ingestor/               # GitHub audit log ingestion
 ├── snowflake-chronicle-ingestor/            # Snowflake ACCOUNT_USAGE logs
+├── thinkst-canary-chronicle-ingestor/       # Thinkst Canary audit trail ingestion
 ```
 
 ---
