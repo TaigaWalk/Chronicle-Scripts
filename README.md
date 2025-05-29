@@ -74,4 +74,3 @@ This approach allows users to maintain full control over ingestion timing and av
 ## 👥 Contributions
 
 If you’d like to contribute a new connector or improve an existing one, feel free to open a pull request or submit an issue.
-# Chronicle-Scripts
